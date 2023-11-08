@@ -15,8 +15,8 @@ phases:
       #- aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 566578246562.dkr.ecr.us-east-1.amazonaws.com
       - # Replace with this to your repository URI
       #- REPOSITORY_URI=$(aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com)
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 566578246562.dkr.ecr.us-east-1.amazonaws.com
-      - REPOSITORY_URI=566578246562.dkr.ecr.us-east-1.amazonaws.com/omnilayers-tiles
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 403179053416.dkr.ecr.us-east-1.amazonaws.com
+      - REPOSITORY_URI=403179053416.dkr.ecr.us-east-1.amazonaws.com/omnilayers-tiles
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
 
   build:
@@ -25,7 +25,7 @@ phases:
       - echo Building the Docker image...
       #- export TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
       - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker tag omnilayers-tiles:latest 403179053416.dkr.ecr.us-east-1.amazonaws.com/omnilayers-tiles:latest
 
       #- docker tag maptiler/tileserver-gl omnilayers-tiles/tileserver
       
@@ -35,7 +35,7 @@ phases:
       - echo Pushing Docker images to ECR...
       #- docker push $REPOSITORY_URI:latest
       - DOCKER_CONTAINER_NAME=omnilayers-tiles
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_CONTAINER_NAME:$IMAGE_TAG
+      - docker push 403179053416.dkr.ecr.us-east-1.amazonaws.com/omnilayers-tiles:latest
       #- docker push $REPOSITORY_URI:$TAG
       - echo Writing image definitions file...
       - printf '[{"name":"%s","imageUri":"%s:%s"}]' $DOCKER_CONTAINER_NAME $REPOSITORY_URI $IMAGE_TAG > imagedefinitions.json
